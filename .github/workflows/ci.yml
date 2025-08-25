@@ -8,7 +8,7 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
     env:
-      PYTHONPATH: ${{ github.workspace }}   # <-- ensure 'app' is importable
+      PYTHONPATH: ${{ github.workspace }}   # ensure 'app' is importable
     steps:
       - uses: actions/checkout@v4
 
@@ -23,19 +23,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install httpx==0.28.1
+          pip install httpx==0.28.1  # belt & suspenders
 
-      - name: Sanity check paths
+      - name: Sanity check
         run: |
           pwd
           ls -la
-          python - <<'PY'
-import sys, os
-print("WORKSPACE:", os.getcwd())
-print("PYTHONPATH:", os.environ.get("PYTHONPATH"))
-print("sys.path[0]:", sys.path[0])
-print("repo has 'app'? ->", os.path.isdir("app"), os.listdir("app") if os.path.isdir("app") else "no app/")
-PY
+          python -c "import os,sys; print('WORKSPACE:', os.getcwd()); print('PYTHONPATH:', os.environ.get('PYTHONPATH')); print('has app dir:', os.path.isdir('app'))"
 
       - name: Run tests
         run: pytest -q
