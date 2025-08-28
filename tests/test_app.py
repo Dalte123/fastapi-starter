@@ -37,3 +37,19 @@ def test_multiply_missing_param():
     r = client.get("/math/multiply", params={"a": 2})
     assert r.status_code == 400
     assert r.json()["detail"] == "Both 'a' and 'b' query params are required"
+
+def test_divide_happy_path():
+   r = client.get("/math/divide", params={"a":10.0, "b": 2.0})
+   assert r.status_code == 200
+   assert r.json() == {"result": 5.0}
+
+def test_divide_missing_param():
+    r = client.get("/math/divide", params={"a": 10.0})
+    assert r.status_code == 400
+    assert r.json()["detail"] == "Both 'a' and 'b' query params are required"
+
+def test_divide_by_zero():
+    r = client.get("/math/divide", params={"a": 10.0, "b": 0.0})
+    assert r.status_code == 400
+    assert r.json()["detail"] == "Division by zero not allowed"
+    
