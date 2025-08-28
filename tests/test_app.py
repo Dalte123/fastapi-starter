@@ -52,4 +52,20 @@ def test_divide_by_zero():
     r = client.get("/math/divide", params={"a": 10.0, "b": 0.0})
     assert r.status_code == 400
     assert r.json()["detail"] == "Division by zero not allowed"
+
+def test_subtract_happy_path():
+    r = client.get("/math/subtract", params={"a": 10, "b": 3})
+    assert r.status_code == 200
+    assert r.json() == {"result": 7}
+
+def test_subtract_missing_param():
+    r = client.get("/math/subtract", params={"a": 10})
+    assert r.status_code == 400
+    assert r.json()["detail"] == "Both 'a' and 'b' query params are required"
+
+def test_subtract_negative_result():
+    r = client.get("/math/subtract", params={"a": 3, "b": 10})
+    assert r.status_code == 200
+    assert r.json() == {"result": -7}
+
     
