@@ -20,7 +20,7 @@ def test_echo_query():
 
 def test_add_happy_path():
     r = client.get("/math/add", params={"a": 2, "b": 3})
-    assert r.status_code ==200
+    assert r.status_code == 200
     assert r.json() == {"result": 5}
 
 def test_add_missing_param():
@@ -68,4 +68,64 @@ def test_subtract_negative_result():
     assert r.status_code == 200
     assert r.json() == {"result": -7}
 
+def test_operation_add():
+   r = client.post("/math/operation", json={"a":10, "b": 3, "op":"add"})
+   assert r.status_code == 200
+   assert r.json() == {"result": 13}
+
+def test_operation_subtract():
+    r = client.post("/math/operation", json={"a":10, "b": 3, "op":"subtract"})
+    assert r.status_code == 200
+    assert r.json() == {"result": 7}
+
+def test_operation_multiply():
+    r = client.post("/math/operation", json={"a":10, "b": 3, "op":"multiply"})
+    assert r.status_code == 200
+    assert r.json() == {"result": 30}
+
+def test_operation_divide():
+    r = client.post("/math/operation", json={"a":12, "b": 3, "op":"divide"})
+    assert r.status_code == 200
+    assert r.json() == {"result": 4.0}
+
+def test_operation_divide_zero():
+    r = client.post("/math/operation", json={"a": 5, "b": 0, "op":"divide"})
+    assert r.status_code == 400
+    assert r.json()["detail"] == "Division by zero not allowed"
+
+
+def test_operation_unsupported():
+    r = client.post("/math/operation", json={"a": 5, "b": 1, "op":"carrot"})
+    assert r.status_code == 400
+    assert r.json()["detail"] == "Unsupported operation"
+
+def test_operation_case_insensitive():
+    r = client.post("/math/operation", json={"a": 10, "b": 5, "op":"Add"})
+    assert r.status_code == 200
+    assert r.json() == {"result": 15}
+
+def test_operation_wrong_input():
+    r = client.post("/math/operation", json={"a": "ten", "b": "five", "op":"Add"})
+    assert r.status_code == 422
+    # converts HTTP to Python dictionary 
+    body = r.json()
+    assert "integer" in body["detail"][0]["msg"].lower()
     
+
+def test_operation_wrong_string_int():
+    r = client.post("/math/operation", json={"a": "TEN", "b": 5, "op":"add"})
+    assert r.status_code == 422
+    body = r.json()
+    assert "integer" in body["detail"][0]["msg"].lower()
+   
+
+def test_operation_json_error():
+    r = client.post(
+        "/math/operation",
+        data='{"a": TEN, "b": 5, "op": "add"}',
+        headers={"Content-Type": "application/json"}
+        )
+    assert r.status_code == 422
+    body = r.json()
+    assert body["detail"][0]["type"] == "json_invalid"
+    assert "JSON decode error" in body["detail"][0]["msg"]

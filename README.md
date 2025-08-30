@@ -1,24 +1,33 @@
-# Day 4 — FastAPI + Tests + Math Ops (add, multiply, divide, subtract)
+# FastAPI Starter Project
 
-![CI](https://github.com/Dalte123/fastapi-starter/actions/workflows/ci.yml/badge.svg)
+Day 5 – FastAPI + Tests + Pydantic Models + Validation
 
-A tiny, production-style starter: FastAPI app with tests and CI. No Docker required.
+✅ Implemented endpoints for:
+- Health check (`/healthz`)
+- Echo (`/echo`)
+- Math operations: `add`, `subtract`, `multiply`, `divide`
+- Unified math operation (`/math/operation`) using **Pydantic BaseModel**
 
----
+✅ Tests cover:
+- Happy paths for all operations
+- Error handling for missing query params
+- Division by zero
+- Unsupported operations
+- Validation errors (wrong types → Pydantic 422 response)
+- JSON decode errors (invalid JSON payloads)
 
-## Quick start (no Docker)
+### How to run locally
 
 ```bash
+# create virtual environment
 python -m venv .venv
-# Windows PowerShell:
-#   .\.venv\Scripts\Activate.ps1
-# If PowerShell blocks it:
-#   .\.venv\Scripts\activate.bat
-# macOS/Linux:
-#   source .venv/bin/activate
+# activate it
+.venv\Scripts\activate  # Windows PowerShell
+# or
+source .venv/bin/activate  # Mac/Linux
 
+# install dependencies
 pip install -r requirements.txt
+
+# run the server
 uvicorn app.main:app --reload
-# App:     http://127.0.0.1:8000
-# Health:  http://127.0.0.1:8000/healthz
-# Docs:    http://127.0.0.1:8000/docs

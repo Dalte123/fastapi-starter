@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 app = FastAPI(title="Day1 Starter")
 
@@ -39,3 +40,29 @@ def subtract(a: int | None = None, b: int | None = None):
     if a is None or b is None:
         raise HTTPException(status_code=400, detail="Both 'a' and 'b' query params are required")
     return {"result": a - b}
+
+class Operation(BaseModel):
+    a: int
+    b: int
+    op: str
+
+@app.post("/math/operation")
+def do_operation(operation: Operation):
+    op = operation.op.lower()
+
+    if op == "add":
+        return {"result": operation.a + operation.b}
+    elif op == "subtract": 
+        return {"result": operation.a - operation.b}
+    elif op == "multiply": 
+        return {"result": operation.a * operation.b}
+    elif op == "divide": 
+        if operation.b == 0:
+            raise HTTPException(status_code=400, detail="Division by zero not allowed")
+        return {"result": operation.a / operation.b}
+    else:
+        raise HTTPException(status_code=400, detail="Unsupported operation")
+         
+    
+
+
