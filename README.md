@@ -1,8 +1,12 @@
 # FastAPI Starter Project
 
-Day 5 – FastAPI + Tests + Pydantic Models + Validation
+Day 6 – FastAPI + Tests + Pydantic Models + Validation
 
-✅ Implemented endpoints for:
+---
+
+## 📂 Features Implemented
+
+✅ Endpoints:
 - Health check (`/healthz`)
 - Echo (`/echo`)
 - Math operations: `add`, `subtract`, `multiply`, `divide`
@@ -16,18 +20,6 @@ Day 5 – FastAPI + Tests + Pydantic Models + Validation
 - Validation errors (wrong types → Pydantic 422 response)
 - JSON decode errors (invalid JSON payloads)
 
-### How to run locally
+---
 
-```bash
-# create virtual environment
-python -m venv .venv
-# activate it
-.venv\Scripts\activate  # Windows PowerShell
-# or
-source .venv/bin/activate  # Mac/Linux
-
-# install dependencies
-pip install -r requirements.txt
-
-# run the server
-uvicorn app.main:app --reload
+## 📂 Project Structure
