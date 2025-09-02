@@ -7,6 +7,8 @@ from app.math_utils import (
     divide as div_util,
     compute,
 )
+from app.auth import authfunc
+from fastapi import Depends
 
 app = FastAPI(title="Fast API")
 
@@ -29,7 +31,7 @@ def echo(msg: str = "hello"):
 
 
 @app.get("/math/add")
-def add(a: int | None = None, b: int | None = None):
+def add(a: int | None = None, b: int | None = None, auth: bool = Depends(authfunc)):
     if a is None or b is None:
         # 400 Bad Request if a or b missing
         raise HTTPException(
@@ -40,7 +42,7 @@ def add(a: int | None = None, b: int | None = None):
 
 
 @app.get("/math/multiply")
-def multiply(a: int | None = None, b: int | None = None):
+def multiply(a: int | None = None, b: int | None = None, auth: bool = Depends(authfunc)):
     if a is None or b is None:
         # 400 Bad Request if a or b missing
         raise HTTPException(
@@ -50,7 +52,7 @@ def multiply(a: int | None = None, b: int | None = None):
 
 
 @app.get("/math/divide")
-def divide(a: float | None = None, b: float | None = None):
+def divide(a: float | None = None, b: float | None = None, auth: bool = Depends(authfunc)):
     if a is None or b is None:
         # 400 Bad Request if a or b missing
         raise HTTPException(
@@ -63,7 +65,7 @@ def divide(a: float | None = None, b: float | None = None):
 
 
 @app.get("/math/subtract")
-def subtract(a: int | None = None, b: int | None = None):
+def subtract(a: int | None = None, b: int | None = None, auth: bool = Depends(authfunc)):
     if a is None or b is None:
         # 400 Bad Request if a or b missing
         raise HTTPException(
@@ -73,7 +75,7 @@ def subtract(a: int | None = None, b: int | None = None):
 
 
 @app.post("/math/operation")
-def do_operation(payload: Operation):
+def do_operation(payload: Operation, auth: bool = Depends(authfunc)):
     try:
         return {"result": compute(payload.op, payload.a, payload.b)}
     except ValueError as e:
