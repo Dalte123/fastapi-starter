@@ -1,5 +1,7 @@
 
 def add(a: int , b: int ) -> int:
+    if a is None or b is None:
+        raise ValueError("Both 'a' and 'b' query params are required")
     return a + b
 
 
