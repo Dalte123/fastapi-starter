@@ -1,6 +1,6 @@
 FastAPI Starter Project
 
-Day 7 – FastAPI + Token-Based Authentication
+Day 8 – FastAPI + Token-Based Authentication
 
 ✅ Implemented endpoints for:
 
@@ -30,4 +30,4 @@ main.py → API layer, validation, error mapping
 
 Added authfunc in app/auth.py.
 
-All math routes now require a static token via the Authorization header:
+All math routes now require a token via the Authorization header:
