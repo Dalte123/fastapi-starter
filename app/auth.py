@@ -1,5 +1,8 @@
 from fastapi import Depends, HTTPException, Header
-token = "superSecret123"
+import os
+TOKEN = os.getenv("APP_TOKEN", "superSecret123")
+
+
 
 
 def authfunc(authorization: str = Header(None)) -> str:
@@ -10,7 +13,7 @@ def authfunc(authorization: str = Header(None)) -> str:
 	else:
 		password = authorization.split()[-1]
 		
-		if password == token:
+		if password == TOKEN:
 			return True 
 		else:
 			raise HTTPException(status_code=401, detail="Unauthorized")	
