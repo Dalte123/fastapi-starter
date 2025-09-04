@@ -9,8 +9,7 @@ from app.math_utils import (
 )
 from app.auth import authfunc
 from fastapi import Depends
-import os
-TOKEN = os.getenv("APP_TOKEN", "superSecret123")
+
 
 
 app = FastAPI(title="Fast API")
