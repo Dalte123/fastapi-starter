@@ -1,0 +1,85 @@
+0–3 Months (Projects + LFCA)
+
+What you’ll have:
+
+FastAPI project with auth + DB + tests (GitHub proof).
+
+Add one more small project → maybe a server automation script (e.g., deploy app + DB with Ansible or Bash).
+
+LFCA certification (Linux basics, cloud fundamentals).
+
+Target roles:
+
+IT Support Specialist
+
+Junior Linux Administrator
+
+Technical Support Engineer
+
+NOC (Network Operations Center) Analyst
+
+Salary (NYC ballpark): ~$55k–70k USD.
+
+Why: Shows basic Linux competence + ability to code and document a project.
+
+3–6 Months (RHCSA + AWS Cloud Practitioner)
+
+What you’ll have:
+
+RHCSA (hands-on Red Hat admin skills).
+
+AWS Cloud Practitioner (broad cloud foundation).
+
+Project deployed on a VPS with Nginx/SSL/systemd.
+
+Target roles:
+
+Linux System Administrator
+
+Cloud Support Associate (AWS/GCP/Azure)
+
+DevOps Intern / Associate
+
+Salary (NYC ballpark): ~$70k–90k USD.
+
+Why: RHCSA is respected, Cloud Practitioner adds cloud exposure → you’re more credible for sysadmin + entry cloud roles.
+
+6–9 Months (AWS SysOps Administrator)
+
+What you’ll have:
+
+AWS SysOps Administrator – Associate (automation, monitoring, scaling).
+
+Project with CI/CD, deployed on AWS (EC2 + RDS + S3).
+
+Target roles:
+
+Cloud Operations Engineer
+
+Site Reliability Engineer (Junior/Associate)
+
+Infrastructure Engineer
+
+Salary (NYC ballpark): ~$90k–110k USD.
+
+Why: SysOps proves you can run production workloads in AWS; your GitHub shows hands-on deployments.
+
+9–12 Months (Full Stack: Projects + 4 Certs)
+
+What you’ll have:
+
+Certs: LFCA, RHCSA, AWS Cloud Practitioner, AWS SysOps Admin.
+
+Projects: FastAPI + DB + auth, automation/deployment script, AWS CI/CD project.
+
+Target roles:
+
+Infrastructure Engineer (mid-level)
+
+Cloud/DevOps Engineer
+
+Platform Engineer (junior to mid-level)
+
+Salary (NYC ballpark): ~$110k–135k+ USD.
+
+Why: You’ll have both formal certs + hands-on portfolio, which matches NYC job postings that ask for Terraform/AWS/Linux experience.

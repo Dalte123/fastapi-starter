@@ -9,10 +9,40 @@ from app.math_utils import (
 )
 from app.auth import authfunc
 from fastapi import Depends
-
-
+from sqlalchemy.orm import Session
+from .db import Base, engine, get_db
+from . import models, schemas
 
 app = FastAPI(title="Fast API")
+
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
+
+@app.post("/users/", response_model=schemas.UserRead, status_code=201)
+def create_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
+    # check duplicate email
+    existing = db.query(models.User).filter(models.User.email == payload.email).first()
+    if existing:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=409, detail="Email already registered")
+    user = models.User(name=payload.name, email=payload.email)
+    db.add(user)
+    db.commit()
+    db.refresh(user)  
+    return user
+
+@app.get("/users/", response_model=list[schemas.UserRead])
+def list_users(db: Session = Depends(get_db)):
+    return db.query(models.User).order_by(models.User.id).all()
+
+@app.get("/users/{user_id}", response_model=schemas.UserRead)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.get(models.User, user_id)
+    if not user:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 
 # Pydantic request models
