@@ -1,6 +1,6 @@
 FastAPI Starter Project
 
-Day 8 – FastAPI + Token-Based Authentication
+Day 9 – Database Integration (PostgreSQL + SQLAlchemy)
 
 ✅ Implemented endpoints for:
 
@@ -8,26 +8,45 @@ Health check (/healthz)
 
 Echo (/echo)
 
-Math operations with query params: add, subtract, multiply, divide
+Users: create/list/get-by-id
 
-Unified math operation (/math/operation) using Pydantic BaseModel
+POST /users/
+
+GET /users/
+
+GET /users/{id}
+
+(Math endpoints from earlier remain available.)
+
+✅ Database integration:
+
+Added PostgreSQL connection via SQLAlchemy engine + session factory.
+
+Tables are created on app startup for learning (Alembic migrations planned later).
+
+User model enforces unique email and stores created_at timestamp.
 
 ✅ Refactor highlights:
 
-Moved all math logic into app/math_utils.py as pure Python functions.
+Introduced app/db.py with Engine, SessionLocal, Base, and request-scoped get_db() dependency.
 
-Utility functions raise ValueError for invalid input (e.g., divide by zero, unsupported operations).
+Added app/models.py with User (id, name, email UNIQUE, created_at).
 
-FastAPI routes (main.py) catch ValueError and translate into HTTPException(status_code=400).
+Added app/schemas.py with UserCreate (Pydantic EmailStr) and UserRead (from_attributes enabled).
 
-Separation of concerns:
+✅ Separation of concerns:
 
-math_utils.py → business logic
+db.py → connection pool, sessions, Base, FastAPI dependency
 
-main.py → API layer, validation, error mapping
+models.py → database tables (ORM models)
+
+schemas.py → API request/response validation (Pydantic)
+
+main.py → routes, validation, error mapping, startup create_all()
 
 ✅ Authentication layer:
 
-Added authfunc in app/auth.py.
+Existing Bearer token auth in app/auth.py continues to protect math routes.
 
-All math routes now require a token via the Authorization header:
+To call math routes, include the header:
+Authorization: Bearer superSecret123
