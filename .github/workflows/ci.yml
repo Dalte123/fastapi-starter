@@ -23,13 +23,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install httpx==0.28.1  # belt & suspenders
+          pip install httpx==0.28.1  # optional
 
       - name: Sanity check
         run: |
           pwd
           ls -la
           python -c "import os,sys; print('WORKSPACE:', os.getcwd()); print('PYTHONPATH:', os.environ.get('PYTHONPATH')); print('has app dir:', os.path.isdir('app'))"
+
+      # 👇 This line makes tests use SQLite instead of Postgres
+      - name: Use SQLite for tests (no Postgres needed)
+        run: echo "DATABASE_URL=sqlite:///./test.db" >> $GITHUB_ENV
 
       - name: Run tests
         run: pytest -q
