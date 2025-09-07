@@ -2,3 +2,6 @@ fastapi==0.112.1
 uvicorn[standard]==0.30.6
 pytest==8.3.2
 httpx==0.28.1
+sqlalchemy>=2,<3
+psycopg2-binary
+pydantic[email]
