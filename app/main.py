@@ -12,6 +12,9 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 from .db import Base, engine, get_db
 from . import models, schemas
+from fastapi import HTTPException
+from pydantic import EmailStr
+
 
 app = FastAPI(title="Fast API")
 
@@ -21,12 +24,20 @@ def on_startup():
 
 @app.post("/users/", response_model=schemas.UserRead, status_code=201)
 def create_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
-    # check duplicate email
-    existing = db.query(models.User).filter(models.User.email == payload.email).first()
+    trimmed_email = payload.email.strip().lower()
+    trimmed_name = payload.name.strip()
+    if not trimmed_email or not trimmed_name:
+         raise HTTPException(status_code=422, detail="Email or Name are empty")
+
+    if not trimmed_email.endswith((".ca", ".com")):
+        raise HTTPException(status_code=422, detail="Email TLD not allowed")
+
+    existing = db.query(models.User).filter(models.User.email == trimmed_email).first()
     if existing:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=409, detail="Email already registered")
-    user = models.User(name=payload.name, email=payload.email)
+        raise HTTPException(status_code=409, detail="Email already in use")
+    
+       
+    user = models.User(name=trimmed_name, email=trimmed_email)
     db.add(user)
     db.commit()
     db.refresh(user)  
@@ -36,13 +47,29 @@ def create_user(payload: schemas.UserCreate, db: Session = Depends(get_db)):
 def list_users(db: Session = Depends(get_db)):
     return db.query(models.User).order_by(models.User.id).all()
 
+@app.get("/users/by_email", response_model=schemas.UserRead)
+def get_user_by_email(email: EmailStr, db: Session = Depends(get_db)):
+    trimmed_email = email.strip().lower()
+    if not trimmed_email.endswith((".ca", ".com")):
+        raise HTTPException(status_code=422, detail="Email TLD not allowed") 
+
+    existing = db.query(models.User).filter(models.User.email == trimmed_email).first()
+    if not existing:
+        raise HTTPException(status_code=404, detail="User not found") 
+
+    return existing        
+
 @app.get("/users/{user_id}", response_model=schemas.UserRead)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user_id(user_id: int, db: Session = Depends(get_db)):
     user = db.get(models.User, user_id)
     if not user:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
+    
+    
 
 
 # Pydantic request models
